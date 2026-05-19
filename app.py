@@ -5,6 +5,11 @@ import pandas as pd
 from pykrx import stock
 from datetime import datetime
 import logging
+import sys
+
+# UTF-8 인코딩 설정
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -16,7 +21,7 @@ st.set_page_config(page_title="TIMA 스타일 주도주 모니터링", layout="w
 # 티마 감성의 상단 바 디자인
 st.markdown("""
     <div style="background-color: #f1f8f6; padding: 15px; border-radius: 10px; margin-bottom: 25px;">
-        <h2 style="color: #00a884; margin: 0; display: inline-block;">티마 (TIMA) Style</h2>
+        <h2 style="color: #00a884; margin: 0; display: inline-block;">🎯 TIMA 스타일</h2>
         <span style="color: #777; margin-left: 15px; font-weight: bold;">Premium 테마 모니터링</span>
         <span style="float: right; color: #555;""" + datetime.today().strftime('%m-%d %H:%M') + """</span>
     </div>
@@ -61,7 +66,7 @@ def get_tima_theme_data():
     try:
         logger.info("테마 데이터 수집 시작...")
         
-        # 1. 네이버에서 당일 테마 순위 가져오기
+        # 1. 네이버에서 방일 테마 순위 가져오기
         url = "https://finance.naver.com/sise/theme.naver"
         headers = {"User-Agent": "Mozilla/5.0"}
         
@@ -119,9 +124,9 @@ def get_tima_theme_data():
             today_str = datetime.today().strftime("%Y%m%d")
             try:
                 df_vol = stock.get_market_price_change_by_ticker(today_str, today_str, "ALL")
-                logger.info(f"당일({today_str}) 거래량 데이터 로드 성공")
+                logger.info(f"방일({today_str}) 거래량 데이터 로드 성공")
             except Exception as e:
-                logger.warning(f"당일 데이터 로드 실패, 최근 영업일 데이터 사용: {e}")
+                logger.warning(f"방일 데이터 로드 실패, 최근 영업일 데이터 사용: {e}")
                 latest_day = stock.get_nearest_business_day_in_a_week()
                 df_vol = stock.get_market_price_change_by_ticker(latest_day, latest_day, "ALL")
             
@@ -194,7 +199,7 @@ def get_tima_theme_data():
                             logger.debug(f"종목 파싱 실패: {e}")
                             continue
                 
-                # 테마 내에서 상위 4개만 커트
+                # 테마 내에서 상위 4개만 카트
                 final_data[t['name']] = {
                     "theme_change": t['change'],
                     "stocks": stocks_in_theme[:4]
@@ -213,7 +218,7 @@ def get_tima_theme_data():
         return {}
 
 # -----------------------------------------------------------------
-# 화면 그리기 (티마 UI 레이아웃 구현)
+# 화면 ���리기 (티마 UI 레이아웃 구현)
 # -----------------------------------------------------------------
 try:
     data = get_tima_theme_data()
@@ -223,7 +228,7 @@ try:
                  "- 장 시간이 아님 (평일 09:00 ~ 15:30)\n"
                  "- 네트워크 연결 문제\n"
                  "- 웹사이트 변경으로 인한 파싱 실패\n"
-                 "\n새로고침(F5)을 시도하거나 잠시 후 다시 접속해주세요.")
+                 "\n새로고침(F5)을 시도하거나 잠시 후 다시 속합해주세요.")
     else:
         # 2x2 격자(Grid) 구조 생성
         theme_names = list(data.keys())

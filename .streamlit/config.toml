@@ -7,6 +7,7 @@ font = "sans serif"
 
 [client]
 showErrorDetails = true
+encoding = "utf-8"
 
 [server]
 port = 8501
